@@ -70,6 +70,7 @@ function App() {
     axios.get("https://pokeapi.co/api/v2/pokemon/" + id).then((response) => {
       setDetallesPokemon(response.data);
     });
+    console.log(detallesPokemon);
   };
 
   return (
@@ -92,10 +93,9 @@ function App() {
             variant="outlined"
             value={buscador}
             onChange={handleInputChange}
-            style={{ width: "50%", backgroundColor: "#8fc096"} }
           />
         </Box>
- 
+
         <Box marginTop={"20px"}>
           <Grid container justifyContent="space-evenly">
             {/* Listado */}
@@ -133,35 +133,41 @@ function App() {
                       size="small"
                       variant="contained"
                       color="warning"
-                      style={{ marginLeft: "10px", fontSize: "10px", backgroundColor: "#ffcd00", color: "black" }}
+                      style={{ marginLeft: "10px" }}
                       onClick={() => agregar(pokemon)}
                     >
-                      Ver
+                      Agregar
                     </Button>
                   </ListItem>
                 ))}
               </List>
             </Grid>
+
             {/* Lista de seleccionados */}
             <Grid bgcolor={"#a40c35"} item xs={3}>
-              <Card style={{ marginBottom: "20px" }}>
-                <CardMedia
-                  style={{ backgroundColor: "#97cb97" }}
-                  component={"img"}
-                  image={detallesPokemon?.sprites?.front_default}
-                />
-                <CardContent>
-                  <h3>{`${detallesPokemon?.name?.charAt(0).toUpperCase()}${detallesPokemon?.name?.slice(1)} N.° ${detallesPokemon?.id}`}</h3>
-                  <h4>Habilidades:</h4>
-                  {
-                    detallesPokemon?.abilities?.map((item) => (
-                    <li style={{listStyle: "none",textAlign: "center"}}>
-                        {item.ability.name}
-                    </li>
-                    ))
-                  }
-                </CardContent>
-              </Card>
+              {seleccionados.map((item, index) => (
+                <Card style={{ marginBottom: "20px" }}>
+                  <CardHeader
+                    title={` ${item.name} N.° ${
+                      listado.findIndex(
+                        (pokemon) => pokemon.name === item.name
+                      ) + 1
+                    }`}
+                  />
+                  <CardMedia style={{ backgroundColor: "#97cb97" }}>
+                    <img
+                      src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                        listado.findIndex(
+                          (pokemon) => pokemon.name === item.name
+                        ) + 1
+                      }.png`}
+                    />
+                  </CardMedia>
+                  <CardContent>
+                    <h3>Habilidades</h3>
+                  </CardContent>
+                </Card>
+              ))}
             </Grid>
           </Grid>
         </Box>
